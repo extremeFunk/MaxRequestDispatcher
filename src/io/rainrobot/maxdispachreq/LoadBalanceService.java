@@ -9,7 +9,7 @@ public class LoadBalanceService {
     private final int MAX_REQUESTS;
     private int maxAvailability;
     private Map<Integer, Set<ServerAddress>> avelabiletyServerMap;
-    private ServerManeger serverManeger;
+    private ServerManager serverManeger;
 
     public LoadBalanceService(int max_requests) {
         MAX_REQUESTS = max_requests;
@@ -19,7 +19,7 @@ public class LoadBalanceService {
         }
     }
 
-    public ServerAddress addSession(String token) {
+    public ServerAddress createSession(String token) {
         //get the set of servers with that have the least amount of sessions
         Set<ServerAddress> serverSet = avelabiletyServerMap
                                         .get(maxAvailability);
@@ -67,12 +67,15 @@ public class LoadBalanceService {
         servers.add(nuServer);
     }
 
-    public void removeSession(String token, ServerAddress addres) {
-        serverManeger.unRegisterSession(token, addres);
+    public void removeSession(Session session) {
+        String token = session.getToken();
+        ServerAddress address = session.getSessionAddress();
+
+        serverManeger.unRegisterSession(token, address);
         //server will be able to handle one more session
-        int availability = serverManeger.getCurrentAvelabilety(addres);
-        avelabiletyServerMap.get(availability).remove(addres);
-        avelabiletyServerMap.get(availability + 1).add(addres);
-        serverManeger.setCurrentAvailability(addres,availability + 1);
+        int availability = serverManeger.getCurrentAvelabilety(address);
+        avelabiletyServerMap.get(availability).remove(address);
+        avelabiletyServerMap.get(availability + 1).add(address);
+        serverManeger.setCurrentAvailability(address,availability + 1);
     }
 }
