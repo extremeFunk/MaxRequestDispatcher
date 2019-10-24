@@ -15,6 +15,4 @@ public class Dispatcher {
         ServerAddress address = addressService.getAddress(id);
         messageSender.send(msg, address);
     }
-
-
 }
