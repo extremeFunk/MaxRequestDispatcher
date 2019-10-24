@@ -1,13 +1,13 @@
 package io.rainrobot.maxdispachreq;
 
-public interface serverManeger {
-    serverAddress start();
+public interface ServerManeger {
+    ServerAddress start();
 
-    void registerSession(String token, serverAddress avelabiletyServerMap);
+    void registerSession(String token, ServerAddress avelabiletyServerMap);
 
-    void unRegisterSession(String token, serverAddress addres);
+    void unRegisterSession(String token, ServerAddress addres);
 
-    void setCurrentAvailability(serverAddress rndAvailableServer, int i);
+    void setCurrentAvailability(ServerAddress rndAvailableServer, int i);
 
-    int getCurrentAvelabilety(serverAddress addres);
+    int getCurrentAvelabilety(ServerAddress addres);
 }

@@ -5,9 +5,9 @@ public interface Session {
 
     boolean isExpired();
 
-    serverAddress
+    ServerAddress
 
     getSessionAddress();
 
-    void setAddress(serverAddress address);
+    void setAddress(ServerAddress address);
 }

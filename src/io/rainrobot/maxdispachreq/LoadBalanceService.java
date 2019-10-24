@@ -1,6 +1,5 @@
 package io.rainrobot.maxdispachreq;
 
-
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -9,8 +8,8 @@ public class LoadBalanceService {
 
     private final int MAX_REQUESTS;
     private int maxAvailability;
-    private Map<Integer, Set<serverAddress>> avelabiletyServerMap;
-    private io.rainrobot.maxdispachreq.serverManeger serverManeger;
+    private Map<Integer, Set<ServerAddress>> avelabiletyServerMap;
+    private ServerManeger serverManeger;
 
     public LoadBalanceService(int max_requests) {
         MAX_REQUESTS = max_requests;
@@ -20,11 +19,11 @@ public class LoadBalanceService {
         }
     }
 
-    public serverAddress addSession(String token) {
+    public ServerAddress addSession(String token) {
         //get the set of servers with that have the least amount of sessions
-        Set<serverAddress> serverSet = avelabiletyServerMap
+        Set<ServerAddress> serverSet = avelabiletyServerMap
                                         .get(maxAvailability);
-        serverAddress rndPickServer = pickRndServerAndRemap(token, serverSet);
+        ServerAddress rndPickServer = pickRndServerAndRemap(token, serverSet);
 
         int setSize = serverSet.size();
         if (setSize == 0) {
@@ -38,8 +37,8 @@ public class LoadBalanceService {
         return rndPickServer;
     }
 
-    private serverAddress pickRndServerAndRemap(String token, Set<serverAddress> serverSet) {
-        serverAddress rndPickServer = serverSet.iterator().next();
+    private ServerAddress pickRndServerAndRemap(String token, Set<ServerAddress> serverSet) {
+        ServerAddress rndPickServer = serverSet.iterator().next();
         serverManeger.registerSession(token, rndPickServer);
         //register server availability
         serverManeger.setCurrentAvailability(rndPickServer,
@@ -60,15 +59,15 @@ public class LoadBalanceService {
 
 
     private void createNewServer() {
-        serverAddress nuServer = serverManeger.start();
+        ServerAddress nuServer = serverManeger.start();
         int availability = MAX_REQUESTS - 1;
         maxAvailability = availability;
-        Set<serverAddress> servers = avelabiletyServerMap
+        Set<ServerAddress> servers = avelabiletyServerMap
                                     .get(availability);
         servers.add(nuServer);
     }
 
-    public void removeSession(String token, serverAddress addres) {
+    public void removeSession(String token, ServerAddress addres) {
         serverManeger.unRegisterSession(token, addres);
         //server will be able to handle one more session
         int availability = serverManeger.getCurrentAvelabilety(addres);
