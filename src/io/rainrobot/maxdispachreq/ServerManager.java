@@ -1,6 +1,6 @@
 package io.rainrobot.maxdispachreq;
 
-public interface ServerManeger {
+public interface ServerManager {
     ServerAddress start();
 
     void registerSession(String token, ServerAddress avelabiletyServerMap);
