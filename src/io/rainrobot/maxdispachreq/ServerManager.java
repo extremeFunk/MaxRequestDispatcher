@@ -7,7 +7,4 @@ public interface ServerManager {
 
     void unRegisterSession(String token, ServerAddress addres);
 
-    void setCurrentAvailability(ServerAddress rndAvailableServer, int i);
-
-    int getCurrentAvelabilety(ServerAddress addres);
 }
