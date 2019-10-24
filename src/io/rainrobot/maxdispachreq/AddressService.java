@@ -1,35 +1,30 @@
 package io.rainrobot.maxdispachreq;
 
-import java.util.Map;
-
 public class AddressService {
 
-    private Map<String, Session> tokenSessionMap;
-    private LoadBalanceService loadBalancerService;
+    private SessionCache cache;
+    private LoadBalanceService loadBalance;
 
-    public ServerAddress getAddress(String id) {
-        return createSession(id);
-    }
-
-    public ServerAddress createSession(String token) {
-        Session session = tokenSessionMap.get(token);
-        if(session != null && !session.isExpired()) {
-            return session.getSessionAddress();
+    public ServerAddress getAddress(String token) {
+        if(cache.exist(token)) {
+            return cache.get(token).getSessionAddress();
         }
-        ServerAddress addres = loadBalancerService.addSession(token);
-        session.setAddress(addres);
-        tokenSessionMap.remove(session.getToken());
-        tokenSessionMap.put(session.getToken(), session);
-
-        return addres;
+        else {
+            ServerAddress adders = loadBalance.createSession(token);
+            cache.add(buildSession(token, adders));
+            return adders;
+        }
     }
+
+    private SimpleSession buildSession(String token, ServerAddress adders) {
+        return new SimpleSession.Builder().token(token).addres(adders).build();
+    }
+
 
     public void endSession(String token) {
-        Session session = tokenSessionMap.get(token);
-        if(session != null && !session.isExpired()) {
-            ServerAddress adders = session.getSessionAddress();
-            loadBalancerService.removeSession(token, adders);
-            tokenSessionMap.remove(token);
+        if(cache.exist(token)) {
+            loadBalance.removeSession(cache.get(token));
+            cache.remove(token);
         }
     }
 }
