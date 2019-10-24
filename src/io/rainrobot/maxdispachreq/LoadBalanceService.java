@@ -10,6 +10,7 @@ public class LoadBalanceService {
     private int maxAvailability;
     private Map<Integer, Set<ServerAddress>> avelabiletyServerMap;
     private ServerManager serverManeger;
+    private ServerPicker picker;
 
     public LoadBalanceService(int max_requests) {
         MAX_REQUESTS = max_requests;
@@ -23,8 +24,7 @@ public class LoadBalanceService {
         //get the set of servers with that have the least amount of sessions
         Set<ServerAddress> serverSet = avelabiletyServerMap
                                         .get(maxAvailability);
-        ServerAddress rndPickServer = pickRndServerAndRemap(token, serverSet);
-
+        ServerAddress rndPickServer = picker.pickAndRemap(token, serverSet);
         int setSize = serverSet.size();
         if (setSize == 0) {
             decrementMaxAvailabilety();
@@ -36,17 +36,8 @@ public class LoadBalanceService {
         }
         return rndPickServer;
     }
+    
 
-    private ServerAddress pickRndServerAndRemap(String token, Set<ServerAddress> serverSet) {
-        ServerAddress rndPickServer = serverSet.iterator().next();
-        serverManeger.registerSession(token, rndPickServer);
-        //register server availability
-        serverManeger.setCurrentAvailability(rndPickServer,
-                                            maxAvailability - 1);
-        serverSet.remove(rndPickServer);
-        avelabiletyServerMap.get(maxAvailability - 1).add(rndPickServer);
-        return rndPickServer;
-    }
 
     private void decrementMaxAvailabilety() {
         int setSize;
