@@ -1,12 +1,16 @@
 package io.rainrobot.maxdispachreq;
 
+import java.time.LocalDateTime;
+
 public class SimpleSession implements Session{
     private String token;
     private ServerAddress address;
+    private LocalDateTime experation;
 
     public SimpleSession(Builder b) {
         token = b.token;
         address = b.address;
+        experation = b.expiration;
     }
 
     @Override
@@ -21,7 +25,7 @@ public class SimpleSession implements Session{
 
     @Override
     public boolean isExpired() {
-        return false;
+        return LocalDateTime.now().isAfter(experation);
     }
 
     @Override
@@ -37,6 +41,7 @@ public class SimpleSession implements Session{
     static class Builder {
         String token;
         ServerAddress address;
+        LocalDateTime expiration;
 
         public Builder() {}
 
@@ -52,6 +57,11 @@ public class SimpleSession implements Session{
 
         public SimpleSession build() {
             return new SimpleSession(this);
+        }
+
+        public Builder experation(LocalDateTime experation) {
+            this.expiration = experation;
+            return this;
         }
     }
 }

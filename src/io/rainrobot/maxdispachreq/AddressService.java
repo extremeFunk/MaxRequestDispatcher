@@ -1,5 +1,8 @@
 package io.rainrobot.maxdispachreq;
 
+import java.time.LocalDateTime;
+
+
 public class AddressService {
 
     private SessionCache cache;
@@ -17,7 +20,9 @@ public class AddressService {
     }
 
     private SimpleSession buildSession(String token, ServerAddress adders) {
-        return new SimpleSession.Builder().token(token).addres(adders).build();
+        LocalDateTime experation = LocalDateTime.now().plusHours(24);
+        return new SimpleSession.Builder()
+                .token(token).addres(adders).experation(experation).build();
     }
 
 
