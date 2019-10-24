@@ -54,7 +54,8 @@ public class LoadBalanceService {
             //go to the next set
             maxAvailability --;
             setSize = avelabiletyServerMap.get(maxAvailability).size();
-        } while (setSize == 0);
+        } while (setSize == 0 && maxAvailability != 1);
+        maxAvailability --;
     }
 
 
