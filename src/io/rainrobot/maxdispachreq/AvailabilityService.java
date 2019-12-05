@@ -48,9 +48,14 @@ public class AvailabilityService {
     public boolean fullCapacity() {
         return maxAvailability == 0;
     }
-    //TODO rename to max_session
-    public void initializeMap(int max_requests) {
-        for(int i = 0; i <= max_requests; i++){
+
+    public void initializeMap(int max_sessions_per_server) {
+        //for each possible number of available session on a server
+        // a set is created to hold all the servers with this number
+        // of session that can be added (for instance key 5
+        // will return the set of all the servers that can add
+        // 5 more sessions)
+        for(int i = 0; i <= max_sessions_per_server; i++){
             avelabiletyServerSetMap.put(i, new HashSet<>());
         }
     }
