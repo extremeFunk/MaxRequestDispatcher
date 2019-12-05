@@ -33,7 +33,7 @@ public class AvailabilityService {
 
     public ServerAddress popFromMaxAvailableSet() {
         ServerAddress popServer = getMaxAvailabilitySet().iterator().next();
-        //TODO remove popServer from getMaxAvailabilitySet()
+        getMaxAvailabilitySet().remove(popServer);
         decrementAddressAvailability(popServer, maxAvailability);
         recomputeMaxAvailability();
         return popServer;
