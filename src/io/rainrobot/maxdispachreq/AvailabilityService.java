@@ -62,9 +62,7 @@ public class AvailabilityService {
 
     public void addNewServer(ServerAddress nuServer, int initialAvailability) {
         maxAvailability = initialAvailability;
-        //TODO the new server should
-        // go to availabilityServerSetMap.get(initialAvailability)
-        getMaxAvailabilitySet().add(nuServer);
+        avelabiletyServerSetMap.get(initialAvailability).add(nuServer);
     }
 
     public void incrementAddressAvailability(ServerAddress address) {
