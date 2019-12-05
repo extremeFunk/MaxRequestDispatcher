@@ -7,13 +7,14 @@ public class AddressService {
 
     private SessionCache cache;
     private LoadBalanceService loadBalance;
+    private IExperationSchdualer experationSchdualer;
 
     public ServerAddress getAddress(String token) {
         if(cache.exist(token)) {
             return cache.get(token).getSessionAddress();
         }
         else {
-            ServerAddress adders = loadBalance.createSession(token);
+            ServerAddress adders = loadBalance.getNextAddress(token);
             cache.add(buildSession(token, adders));
             return adders;
         }
@@ -21,6 +22,7 @@ public class AddressService {
 
     private SimpleSession buildSession(String token, ServerAddress adders) {
         LocalDateTime experation = LocalDateTime.now().plusHours(24);
+        experationSchdualer.setExperation(experation, () -> endSession(token));
         return new SimpleSession.Builder()
                 .token(token).addres(adders).experation(experation).build();
     }
