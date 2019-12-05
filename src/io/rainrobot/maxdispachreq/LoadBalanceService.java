@@ -13,7 +13,7 @@ public class LoadBalanceService {
         avelabiletyService.initializeMap(max_requests);
     }
 
-    public ServerAddress createSession(String token) {
+    public ServerAddress getNextAddress(String token) {
         //get the set of servers with that have the least amount of sessions
         ServerAddress address = avelabiletyService.popFromMaxAvailableSet();
         serverManeger.registerSession(token, address);

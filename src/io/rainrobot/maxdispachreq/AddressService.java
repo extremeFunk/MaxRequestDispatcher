@@ -14,7 +14,7 @@ public class AddressService {
             return cache.get(token).getSessionAddress();
         }
         else {
-            ServerAddress adders = loadBalance.createSession(token);
+            ServerAddress adders = loadBalance.getNextAddress(token);
             cache.add(buildSession(token, adders));
             return adders;
         }
