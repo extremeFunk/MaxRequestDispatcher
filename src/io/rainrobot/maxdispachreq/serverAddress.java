@@ -1,4 +1,4 @@
 package io.rainrobot.maxdispachreq;
 
-public interface serverAddress {
+public interface ServerAddress {
 }

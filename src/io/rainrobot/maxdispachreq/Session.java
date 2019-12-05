@@ -1,13 +1,15 @@
 package io.rainrobot.maxdispachreq;
 
 public interface Session {
+
+    void setToken(String token);
+
     String getToken();
 
     boolean isExpired();
 
-    serverAddress
+    ServerAddress getSessionAddress();
 
-    getSessionAddress();
+    void setAddress(ServerAddress address);
 
-    void setAddress(serverAddress address);
 }
